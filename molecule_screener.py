@@ -3,6 +3,7 @@
 import sdf
 import csv
 import mae
+import shlp
 from structure_builder import smiles_to_structure
 from molecule_docking import dock_molecule
 
