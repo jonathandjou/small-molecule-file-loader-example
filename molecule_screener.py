@@ -51,3 +51,30 @@ def screen_molecule(input_file, target_structure, target_docking_grid,
             target_property_options, runtime_timeout)
 
         return success, dock_score, docked_structure
+      
+def convert_pka_data(v)                                              
+    # rearrange model pkA data for pI /titration curve calculation   
+    pkaM = [[], [], [], [], []]                                      
+    for v in model_pka_ref:                                          
+        if not v[2] or not v[5] or not v[6]:                         
+            continue                                                 
+        if type(v[2]) in (tuple, list):                              
+            aN = [a[0] for a in v[5]]                                
+            i, c = shlp.sort_and_count(aN)                           
+            i = shlp.vslice(i, c)                                    
+            x = sorted(list(range(len(c))), key=c.__getitem__)       
+            i = [i[a] for a in x]                                    
+            i = i[-1]                                                
+                                                                     
+            c = v[6][i[0]]                                           
+                                                                     
+            v[2] = old_div(sum(v[2]), float(len(v[2])))              
+            v[6] = c                                                 
+                                                                     
+        pkaM[0].append(v[1])                                         
+        pkaM[1].append(v[0])                                         
+        pkaM[2].append(v[2])                                         
+        pkaM[3].append(v[2])                                         
+        pkaM[4].append(v[6])                                         
+                                                                     
+    return pkaM                                                        
